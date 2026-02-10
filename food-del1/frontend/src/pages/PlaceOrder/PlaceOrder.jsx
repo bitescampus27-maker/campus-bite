@@ -9,7 +9,7 @@ import axios from "axios";
 const handlePayment = async (amount, address, items, token) => {
   try {
     const { data } = await axios.post(
-      "http://localhost:5000/api/payment/create-order",
+      "https://campus-bite-backend.onrender.com/api/payment/create-order",
       { amount },
       { headers: token ? { token } : {} }
     );
