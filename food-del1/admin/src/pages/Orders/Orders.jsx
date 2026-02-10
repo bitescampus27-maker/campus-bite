@@ -16,7 +16,7 @@ const Orders = () => {
   const [selectedOrder, setSelectedOrder] = useState(null);
   const [modalType, setModalType] = useState("online"); // online | pos
 
-  const API_BASE = "http://localhost:5000";
+  const API_BASE = "https://campus-bite-backend.onrender.com";
 
   // ONLINE APIs (UNCHANGED)
   const LIST_API = `${API_BASE}/api/order/list`;
