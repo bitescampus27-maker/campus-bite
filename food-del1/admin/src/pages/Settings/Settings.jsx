@@ -4,7 +4,7 @@ import axios from "axios";
 import "./Settings.css";
 
 const Settings = () => {
-  const API = "http://localhost:5000/api/settings";
+  const API = "https://campus-bite-backend.onrender.com/api/settings";
 
   const [deliveryFee, setDeliveryFee] = useState("");
   const [loading, setLoading] = useState(true);
