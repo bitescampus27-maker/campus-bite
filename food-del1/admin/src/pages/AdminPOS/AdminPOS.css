@@ -1,0 +1,240 @@
+/* ===========================
+   POS PAGE WRAPPER
+=========================== */
+.pos-page {
+  padding: 20px;
+  min-height: 100vh;
+  background: #f6f7fb;
+}
+
+.pos-title {
+  font-size: 28px;
+  margin-bottom: 16px;
+  font-weight: 700;
+  color: #111827;
+}
+
+/* ===========================
+   GRID LAYOUT
+=========================== */
+.pos-grid {
+  display: grid;
+  grid-template-columns: 1.5fr 1fr;
+  gap: 16px;
+  height: calc(100vh - 90px); /* ⭐ fit in one screen */
+}
+
+/* ===========================
+   LEFT — MENU
+=========================== */
+.pos-menu {
+  background: #ffffff;
+  padding: 16px;
+  border-radius: 18px;
+  box-shadow: 0 10px 25px rgba(0,0,0,0.06);
+  display: flex;
+  flex-direction: column;
+}
+
+.pos-search {
+  width: 100%;
+  padding: 10px 14px;
+  border-radius: 14px;
+  border: 1px solid #e5e7eb;
+  margin-bottom: 12px;
+  font-size: 15px;
+}
+
+.pos-search:focus {
+  outline: none;
+  border-color: #2563eb;
+}
+
+.pos-menu-list {
+  overflow-y: auto;
+  flex: 1;
+  padding-right: 6px;
+}
+
+/* MENU ITEM */
+.pos-menu-card {
+  padding: 12px 14px;
+  border-radius: 14px;
+  background: #fafafa;
+  border: 1px solid #eee;
+  margin-bottom: 10px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.pos-menu-card:hover {
+  background: #fff1ec;
+  border-color: #f97316;
+  transform: translateY(-1px);
+}
+
+.pos-menu-name {
+  font-size: 15px;
+  font-weight: 600;
+  color: #111827;
+}
+
+.pos-menu-price {
+  font-size: 14px;
+  font-weight: 600;
+  color: #f97316;
+}
+
+/* ===========================
+   RIGHT — CART
+=========================== */
+.pos-cart {
+  background: #ffffff;
+  padding: 16px;
+  border-radius: 18px;
+  box-shadow: 0 10px 25px rgba(0,0,0,0.06);
+  display: flex;
+  flex-direction: column;
+}
+
+.cart-title {
+  font-size: 20px;
+  font-weight: 700;
+  margin-bottom: 10px;
+}
+
+/* CART ITEMS */
+.cart-items {
+  flex: 1;
+  overflow-y: auto;
+  margin-bottom: 10px;
+  border-bottom: 1px dashed #e5e7eb;
+  padding-bottom: 10px;
+}
+
+.cart-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 8px;
+}
+
+.cart-item-name {
+  font-weight: 600;
+  color: #111827;
+}
+
+.cart-item-price {
+  font-size: 13px;
+  color: #6b7280;
+}
+
+/* QUANTITY */
+.qty-controls {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.qty-controls button {
+  padding: 2px 10px;
+  border-radius: 10px;
+  border: 1px solid #e5e7eb;
+  background: white;
+  cursor: pointer;
+  font-size: 16px;
+}
+
+.qty-controls button:hover {
+  background: #f3f4f6;
+}
+
+/* TOTAL */
+.pos-total {
+  display: flex;
+  justify-content: space-between;
+  font-size: 18px;
+  font-weight: 700;
+  margin: 12px 0;
+}
+
+/* ===========================
+   INPUTS
+=========================== */
+.pos-input-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+  margin-bottom: 10px;
+}
+
+.pos-input-grid input,
+.pos-input-grid select {
+  padding: 10px 14px;
+  border-radius: 14px;
+  border: 1px solid #e5e7eb;
+  font-size: 14px;
+}
+
+.pos-input-grid input:focus,
+.pos-input-grid select:focus {
+  outline: none;
+  border-color: #2563eb;
+}
+
+/* ===========================
+   BUTTONS
+=========================== */
+.pos-actions {
+  display: flex;
+  gap: 12px;
+  margin-top: 10px;
+}
+
+.btn-clear {
+  flex: 1;
+  padding: 12px;
+  border-radius: 14px;
+  border: 1px solid #e5e7eb;
+  background: #ffffff;
+  font-size: 16px;
+  cursor: pointer;
+  font-weight: 600;
+}
+
+.btn-clear:hover {
+  background: #f3f4f6;
+}
+
+/* PLACE ORDER */
+.btn-place {
+  flex: 1;
+  padding: 12px;
+  border-radius: 14px;
+  background: linear-gradient(135deg, #2563eb, #1e40af);
+  color: white;
+  font-size: 16px;
+  cursor: pointer;
+  font-weight: 700;
+  border: none;
+}
+
+.btn-place:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+/* ===========================
+   HELPERS
+=========================== */
+.loading-text,
+.no-items-text,
+.empty-cart {
+  text-align: center;
+  padding: 10px;
+  color: #6b7280;
+  font-size: 14px;
+}

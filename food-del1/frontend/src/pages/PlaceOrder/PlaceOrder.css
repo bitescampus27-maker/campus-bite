@@ -1,0 +1,115 @@
+.place-order {
+    display: flex;
+    align-items: start;
+    justify-content: space-between;
+    gap: 50px;
+    margin: 100px 0px;
+}
+
+.place-order-left {
+    width: 100%;
+    max-width: max(30%, 500px);
+}
+
+.place-order-left .title {
+    font-size: 30px;
+    font-weight: 600;
+    margin-bottom: 50px;
+}
+
+.place-order-left input,
+.place-order-left select {
+    margin-bottom: 15px;
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #C5C5C5;
+    border-radius: 4px;
+    outline-color: tomato;
+    font-size: 15px;
+    background-color: white;
+}
+
+/* Only dropdown styling for Block */
+.place-order-left select {
+    cursor: pointer;
+    color: #333;
+}
+
+/* Input & Select Focus */
+.place-order-left input:focus,
+.place-order-left select:focus {
+    border-color: tomato;
+    box-shadow: 0 0 4px rgba(255, 99, 71, 0.4);
+}
+
+.place-order-left .multi-field {
+    display: flex;
+    gap: 10px;
+}
+
+.place-order-right {
+    width: 100%;
+    max-width: max(40%, 500px);
+}
+
+.payment-options {
+    margin-top: 50px;
+    display: flex;
+    flex-direction: column;
+    align-items: start;
+    gap: 30px;
+}
+
+.payment-option {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    border: 1px solid tomato;
+    padding: 12px 20px;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+.payment-options button {
+    border: none;
+    background-color: tomato;
+    color: white;
+    padding: 12px 30px;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background 0.3s ease;
+}
+
+.payment-options button:hover {
+    background-color: #e24c2a;
+}
+
+@media (max-width:700px) {
+    .place-order {
+        flex-direction: column;
+    }
+}
+.user-type-boxes {
+  display: flex;
+  gap: 15px;
+  margin-bottom: 20px;
+}
+
+.type-box {
+  padding: 12px 20px;
+  border: 2px solid #ccc;
+  border-radius: 8px;
+  cursor: pointer;
+  font-weight: 600;
+  transition: 0.2s;
+  user-select: none;
+}
+
+.type-box:hover {
+  border-color: #ff6b6b;
+}
+
+.type-box.active {
+  border-color: #ff6b6b;
+  background: #ffecec;
+}
