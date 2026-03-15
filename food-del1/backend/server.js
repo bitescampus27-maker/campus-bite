@@ -1,5 +1,6 @@
+```javascript
 // ================================
-// server.js (UPDATED FULL VERSION)
+// server.js (FULL CORRECTED VERSION)
 // ================================
 
 import dotenv from "dotenv";
@@ -19,20 +20,31 @@ import cartRouter from "./routes/cartRoute.js";
 import orderRouter from "./routes/orderRoute.js";
 import paymentRoutes from "./routes/paymentRoutes.js";
 import posRoutes from "./routes/posRoutes.js";
-import settingsRoute from "./routes/settingsRoute.js";  
-import reportRoutes from "./routes/reportRoutes.js";   // ⭐ NEW — Monthly Reports
+import settingsRoute from "./routes/settingsRoute.js";
+import reportRoutes from "./routes/reportRoutes.js";
 
 const app = express();
 
-// Port number
+// --------------------------------------------
+// PORT
+// --------------------------------------------
 const PORT = process.env.PORT || 5000;
 
-// Allow admin panel + frontend to access backend
+// --------------------------------------------
+// Resolve __dirname for ES modules
+// --------------------------------------------
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
+
+// --------------------------------------------
+// CORS CONFIG (FIXED FOR RENDER)
+// --------------------------------------------
 app.use(
   cors({
     origin: [
-      "http://localhost:5173", // main frontend
-      "http://localhost:5174", // admin panel
+      "http://localhost:5173", // frontend local
+      "http://localhost:5174", // admin local
+      "https://campus-bite-2.onrender.com" // deployed admin
     ],
     credentials: true,
   })
@@ -41,67 +53,94 @@ app.use(
 app.use(express.json());
 
 // --------------------------------------------
-// ⭐ ADMIN ACCESS CODE SYSTEM (as you added)
+// STATIC FILES (UPLOADS)
 // --------------------------------------------
+app.use("/images", express.static(path.join(__dirname, "uploads")));
 
-// Resolve __dirname for ES modules
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = path.dirname(__filename);
+// --------------------------------------------
+// ADMIN ACCESS CODE SYSTEM
+// --------------------------------------------
 
 // Path to owners.json
 const ownersFilePath = path.join(__dirname, "owners.json");
 
-// Load owners.json or create it if missing
+// Load owners.json or create if missing
 function loadOwners() {
-  if (!fs.existsSync(ownersFilePath)) {
-    fs.writeFileSync(ownersFilePath, "[]");
+  try {
+    if (!fs.existsSync(ownersFilePath)) {
+      fs.writeFileSync(ownersFilePath, "[]");
+    }
+    return JSON.parse(fs.readFileSync(ownersFilePath));
+  } catch (error) {
+    console.error("Error loading owners:", error);
+    return [];
   }
-  return JSON.parse(fs.readFileSync(ownersFilePath));
 }
 
-// Save owners.json
+// Save owners
 function saveOwners(data) {
-  fs.writeFileSync(ownersFilePath, JSON.stringify(data, null, 2));
+  try {
+    fs.writeFileSync(ownersFilePath, JSON.stringify(data, null, 2));
+  } catch (error) {
+    console.error("Error saving owners:", error);
+  }
 }
 
-// Generate unique admin access code
+// Generate admin code
 function generateAdminCode() {
   return "ADM-" + Math.random().toString(36).substring(2, 10).toUpperCase();
 }
 
-// API: Generate admin code
+// Generate admin code API
 app.post("/api/admin/generate", (req, res) => {
   const { ownerName } = req.body;
 
-  if (!ownerName)
-    return res.status(400).json({ success: false, message: "ownerName required" });
+  if (!ownerName) {
+    return res
+      .status(400)
+      .json({ success: false, message: "ownerName required" });
+  }
 
   const owners = loadOwners();
   const code = generateAdminCode();
 
   owners.push({ ownerName, code });
+
   saveOwners(owners);
 
-  res.json({ success: true, ownerName, code });
+  res.json({
+    success: true,
+    ownerName,
+    code,
+  });
 });
 
-// API: Verify admin login code
+// Verify admin login code
 app.post("/api/admin/verify", (req, res) => {
   const { code } = req.body;
 
-  if (!code)
-    return res.status(400).json({ success: false, message: "Code required" });
+  if (!code) {
+    return res
+      .status(400)
+      .json({ success: false, message: "Code required" });
+  }
 
   const owners = loadOwners();
+
   const match = owners.find((o) => o.code === code);
 
-  if (!match) return res.json({ success: false });
+  if (!match) {
+    return res.json({ success: false });
+  }
 
-  res.json({ success: true });
+  res.json({
+    success: true,
+    ownerName: match.ownerName,
+  });
 });
 
 // --------------------------------------------
-// ⭐ APP ROUTES
+// API ROUTES
 // --------------------------------------------
 
 app.use("/api/user", userRouter);
@@ -111,26 +150,28 @@ app.use("/api/order", orderRouter);
 app.use("/api/payment", paymentRoutes);
 app.use("/api/pos", posRoutes);
 
-// Serve food images
-app.use("/images", express.static("uploads"));
-
-// ⭐ Delivery Fee Settings Route
+// Delivery settings
 app.use("/api/settings", settingsRoute);
 
-// ⭐ Monthly Reports Route (NEW)
+// Monthly reports
 app.use("/api/reports", reportRoutes);
 
 // --------------------------------------------
-// Connect DB
+// DATABASE CONNECTION
 // --------------------------------------------
 connectDB();
 
-// Test Route
+// --------------------------------------------
+// TEST ROUTE
+// --------------------------------------------
 app.get("/", (req, res) => {
   res.send("API Working — Server Online ✔");
 });
 
-// Start server
+// --------------------------------------------
+// START SERVER
+// --------------------------------------------
 app.listen(PORT, () => {
-  console.log(`Server started on http://localhost:${PORT}`);
+  console.log(`🚀 Server running on port ${PORT}`);
 });
+```
