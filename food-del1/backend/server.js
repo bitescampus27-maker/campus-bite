@@ -31,30 +31,20 @@ const app = express();
 const PORT = process.env.PORT || 5000;
 
 // --------------------------------------------
-// Resolve __dirname (for ES Modules)
+// FIX CORS (Allow All Origins)
 // --------------------------------------------
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = path.dirname(__filename);
-
-// --------------------------------------------
-// CORS CONFIG (FIXED FOR RENDER)
-// --------------------------------------------
-app.use(
-  cors({
-    origin: [
-      "http://localhost:5173",
-      "http://localhost:5174",
-      "https://campus-bite-2.onrender.com"
-    ],
-    methods: ["GET", "POST", "PUT", "DELETE"],
-    credentials: true
-  })
-);
+app.use(cors());
 
 // --------------------------------------------
 // MIDDLEWARE
 // --------------------------------------------
 app.use(express.json());
+
+// --------------------------------------------
+// Resolve __dirname (ES Modules)
+// --------------------------------------------
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
 
 // --------------------------------------------
 // STATIC FILES (UPLOADS)
@@ -65,7 +55,6 @@ app.use("/images", express.static(path.join(__dirname, "uploads")));
 // ADMIN ACCESS CODE SYSTEM
 // --------------------------------------------
 
-// owners.json file path
 const ownersFilePath = path.join(__dirname, "owners.json");
 
 // Load owners
@@ -95,7 +84,7 @@ function generateAdminCode() {
   return "ADM-" + Math.random().toString(36).substring(2, 10).toUpperCase();
 }
 
-// Generate admin code API
+// Generate admin code
 app.post("/api/admin/generate", (req, res) => {
   const { ownerName } = req.body;
 
@@ -119,7 +108,7 @@ app.post("/api/admin/generate", (req, res) => {
   });
 });
 
-// Verify admin login code
+// Verify admin code
 app.post("/api/admin/verify", (req, res) => {
   const { code } = req.body;
 
@@ -153,15 +142,11 @@ app.use("/api/cart", cartRouter);
 app.use("/api/order", orderRouter);
 app.use("/api/payment", paymentRoutes);
 app.use("/api/pos", posRoutes);
-
-// Delivery settings
 app.use("/api/settings", settingsRoute);
-
-// Monthly reports
 app.use("/api/reports", reportRoutes);
 
 // --------------------------------------------
-// DATABASE CONNECTION
+// DATABASE
 // --------------------------------------------
 connectDB();
 
