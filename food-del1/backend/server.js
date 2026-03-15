@@ -1,6 +1,5 @@
-```javascript
 // ================================
-// server.js (FULL WORKING VERSION)
+// server.js (PRODUCTION READY)
 // ================================
 
 import dotenv from "dotenv";
@@ -31,14 +30,40 @@ const app = express();
 const PORT = process.env.PORT || 5000;
 
 // --------------------------------------------
-// FIX CORS (Allow All Origins)
+// ✅ PRODUCTION CORS CONFIGURATION
 // --------------------------------------------
-app.use(cors());
+// Specific origins for security (Render + Local dev)
+const allowedOrigins = [
+  'https://campus-bite-2.onrender.com',
+  'http://localhost:3000',
+  'http://localhost:5173',
+  'http://localhost:3001'
+];
+
+app.use(cors({
+  origin: (origin, callback) => {
+    // Allow requests with no origin (mobile apps, etc.)
+    if (!origin) return callback(null, true);
+    
+    if (allowedOrigins.includes(origin)) {
+      callback(null, true);
+    } else {
+      callback(new Error('Not allowed by CORS'));
+    }
+  },
+  credentials: true,
+  methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
+  allowedHeaders: ['Content-Type', 'Authorization']
+}));
+
+// Handle preflight requests
+app.options('*', cors());
 
 // --------------------------------------------
 // MIDDLEWARE
 // --------------------------------------------
-app.use(express.json());
+app.use(express.json({ limit: '10mb' }));
+app.use(express.urlencoded({ extended: true, limit: '10mb' }));
 
 // --------------------------------------------
 // Resolve __dirname (ES Modules)
@@ -63,7 +88,7 @@ function loadOwners() {
     if (!fs.existsSync(ownersFilePath)) {
       fs.writeFileSync(ownersFilePath, "[]");
     }
-    return JSON.parse(fs.readFileSync(ownersFilePath));
+    return JSON.parse(fs.readFileSync(ownersFilePath, 'utf8'));
   } catch (error) {
     console.error("Error loading owners:", error);
     return [];
@@ -73,7 +98,7 @@ function loadOwners() {
 // Save owners
 function saveOwners(data) {
   try {
-    fs.writeFileSync(ownersFilePath, JSON.stringify(data, null, 2));
+    fs.writeFileSync(ownersFilePath, JSON.stringify(data, null, 2), 'utf8');
   } catch (error) {
     console.error("Error saving owners:", error);
   }
@@ -84,7 +109,6 @@ function generateAdminCode() {
   return "ADM-" + Math.random().toString(36).substring(2, 10).toUpperCase();
 }
 
-// Generate admin code
 app.post("/api/admin/generate", (req, res) => {
   const { ownerName } = req.body;
 
@@ -135,7 +159,6 @@ app.post("/api/admin/verify", (req, res) => {
 // --------------------------------------------
 // ROUTES
 // --------------------------------------------
-
 app.use("/api/user", userRouter);
 app.use("/api/food", foodRouter);
 app.use("/api/cart", cartRouter);
@@ -146,6 +169,21 @@ app.use("/api/settings", settingsRoute);
 app.use("/api/reports", reportRoutes);
 
 // --------------------------------------------
+// ERROR HANDLING
+// --------------------------------------------
+app.use((err, req, res, next) => {
+  console.error(err.stack);
+  res.status(500).json({ success: false, message: 'Something went wrong!' });
+});
+
+// --------------------------------------------
+// 404 Handler
+// --------------------------------------------
+app.use('*', (req, res) => {
+  res.status(404).json({ success: false, message: 'Route not found' });
+});
+
+// --------------------------------------------
 // DATABASE
 // --------------------------------------------
 connectDB();
@@ -154,13 +192,25 @@ connectDB();
 // TEST ROUTE
 // --------------------------------------------
 app.get("/", (req, res) => {
-  res.send("API Working — Server Online ✔");
+  res.json({ 
+    message: "Campus Bite API 🚀", 
+    status: "Online", 
+    timestamp: new Date().toISOString()
+  });
 });
 
 // --------------------------------------------
 // START SERVER
 // --------------------------------------------
-app.listen(PORT, () => {
+const server = app.listen(PORT, () => {
   console.log(`🚀 Server running on port ${PORT}`);
+  console.log(`📍 CORS enabled for: ${allowedOrigins.join(', ')}`);
 });
-```
+
+// Graceful shutdown
+process.on('SIGTERM', () => {
+  console.log('SIGTERM received, shutting down gracefully');
+  server.close(() => {
+    console.log('Process terminated');
+  });
+});
