@@ -1,6 +1,6 @@
 ```javascript
 // ================================
-// server.js (FULL CORRECTED VERSION)
+// server.js (FULL WORKING VERSION)
 // ================================
 
 import dotenv from "dotenv";
@@ -31,7 +31,7 @@ const app = express();
 const PORT = process.env.PORT || 5000;
 
 // --------------------------------------------
-// Resolve __dirname for ES modules
+// Resolve __dirname (for ES Modules)
 // --------------------------------------------
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -42,14 +42,18 @@ const __dirname = path.dirname(__filename);
 app.use(
   cors({
     origin: [
-      "http://localhost:5173", // frontend local
-      "http://localhost:5174", // admin local
-      "https://campus-bite-2.onrender.com" // deployed admin
+      "http://localhost:5173",
+      "http://localhost:5174",
+      "https://campus-bite-2.onrender.com"
     ],
-    credentials: true,
+    methods: ["GET", "POST", "PUT", "DELETE"],
+    credentials: true
   })
 );
 
+// --------------------------------------------
+// MIDDLEWARE
+// --------------------------------------------
 app.use(express.json());
 
 // --------------------------------------------
@@ -61,10 +65,10 @@ app.use("/images", express.static(path.join(__dirname, "uploads")));
 // ADMIN ACCESS CODE SYSTEM
 // --------------------------------------------
 
-// Path to owners.json
+// owners.json file path
 const ownersFilePath = path.join(__dirname, "owners.json");
 
-// Load owners.json or create if missing
+// Load owners
 function loadOwners() {
   try {
     if (!fs.existsSync(ownersFilePath)) {
@@ -96,22 +100,22 @@ app.post("/api/admin/generate", (req, res) => {
   const { ownerName } = req.body;
 
   if (!ownerName) {
-    return res
-      .status(400)
-      .json({ success: false, message: "ownerName required" });
+    return res.status(400).json({
+      success: false,
+      message: "ownerName required"
+    });
   }
 
   const owners = loadOwners();
   const code = generateAdminCode();
 
   owners.push({ ownerName, code });
-
   saveOwners(owners);
 
   res.json({
     success: true,
     ownerName,
-    code,
+    code
   });
 });
 
@@ -120,13 +124,13 @@ app.post("/api/admin/verify", (req, res) => {
   const { code } = req.body;
 
   if (!code) {
-    return res
-      .status(400)
-      .json({ success: false, message: "Code required" });
+    return res.status(400).json({
+      success: false,
+      message: "Code required"
+    });
   }
 
   const owners = loadOwners();
-
   const match = owners.find((o) => o.code === code);
 
   if (!match) {
@@ -135,12 +139,12 @@ app.post("/api/admin/verify", (req, res) => {
 
   res.json({
     success: true,
-    ownerName: match.ownerName,
+    ownerName: match.ownerName
   });
 });
 
 // --------------------------------------------
-// API ROUTES
+// ROUTES
 // --------------------------------------------
 
 app.use("/api/user", userRouter);
