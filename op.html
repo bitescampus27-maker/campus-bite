@@ -1,0 +1,370 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Campus Bites</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet">
+
+<style>
+*{box-sizing:border-box;}
+
+body{
+margin:0;
+font-family:Inter,sans-serif;
+background:linear-gradient(rgba(255,255,255,.9), rgba(255,255,255,.9)),
+url("https://images.unsplash.com/photo-1540189549336-e6e99c3679fe");
+background-size:cover;
+display:flex;
+justify-content:center;
+align-items:center;
+min-height:100vh;
+}
+
+.dashboard{
+max-width:1000px;
+width:100%;
+padding:30px;
+background:#fff;
+border-radius:20px;
+box-shadow:0 20px 60px rgba(0,0,0,.15);
+}
+
+h1{text-align:center;color:#ff5722;margin-bottom:40px;}
+
+.empty-state{
+text-align:center;
+padding:60px 20px;
+color:#666;
+}
+
+.empty-state h3{
+color:#ff5722;
+font-size:24px;
+margin-bottom:10px;
+}
+
+.empty-state p{
+font-size:16px;
+margin-bottom:30px;
+}
+
+.empty-icon{
+font-size:80px;
+margin-bottom:20px;
+opacity:0.5;
+}
+
+.controls{
+text-align:center;
+margin:20px 0 40px 0;
+}
+
+select{
+padding:12px 16px;
+border-radius:12px;
+border:2px solid #e0e0e0;
+background:#fff;
+font-size:16px;
+font-weight:600;
+color:#333;
+transition:all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+outline:none;
+min-width:200px;
+box-shadow:0 4px 12px rgba(0,0,0,0.1);
+}
+
+select:focus{
+border-color:#ff5722;
+box-shadow:0 0 0 3px rgba(255,87,34,0.1);
+transform:translateY(-2px);
+}
+
+select:hover{
+border-color:#ff5722;
+transform:translateY(-1px);
+}
+
+.grid{
+display:grid;
+grid-template-columns:repeat(auto-fit,minmax(220px,1fr));
+gap:20px;
+padding:10px 0;
+min-height:300px;
+}
+
+.card{
+opacity:0;
+transform:translateY(30px) scale(0.95);
+height:220px;
+border-radius:15px;
+overflow:hidden;
+cursor:pointer;
+position:relative;
+box-shadow:0 10px 30px rgba(0,0,0,.15);
+transition:all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+display:none; /* HIDDEN BY DEFAULT */
+}
+
+.card.show{
+opacity:1;
+transform:translateY(0) scale(1);
+display:block; /* ONLY SHOW WHEN SELECTED */
+}
+
+.card.show:nth-child(1){transition-delay:0.1s;}
+.card.show:nth-child(2){transition-delay:0.2s;}
+.card.show:nth-child(3){transition-delay:0.3s;}
+.card.show:nth-child(4){transition-delay:0.4s;}
+
+.card:hover:not(.closed){
+transform:translateY(-8px) scale(1.02);
+box-shadow:0 20px 40px rgba(0,0,0,.25);
+}
+
+.card img{
+width:100%;
+height:100%;
+object-fit:cover;
+transition:transform 0.3s ease;
+}
+
+.card:hover img{
+transform:scale(1.05);
+}
+
+.overlay{
+position:absolute;
+bottom:0;
+width:100%;
+
+padding:16px;
+
+background:linear-gradient(
+  to top,
+  rgba(0,0,0,0.9) 0%,
+  rgba(0,0,0,0.7) 40%,
+  rgba(0,0,0,0.3) 70%,
+  transparent 100%
+);
+
+color:#fff;
+font-size:18px;
+font-weight:700;
+letter-spacing:0.5px;
+
+display:flex;
+align-items:flex-end;
+
+text-shadow:0 2px 8px rgba(0,0,0,0.9);
+
+transform:translateY(10px);
+transition:transform 0.3s ease;
+}
+.overlay span{
+background:rgba(0,0,0,0.4);
+padding:6px 10px;
+border-radius:8px;
+}
+.card:hover .overlay{
+transform:translateY(0);
+}
+
+.card.closed .overlay{
+color:#ffcccb;
+}
+
+.status{
+position:absolute;
+top:12px;
+right:12px;
+padding:6px 12px;
+border-radius:12px;
+color:#fff;
+font-size:13px;
+font-weight:600;
+backdrop-filter:blur(10px);
+transition:all 0.3s ease;
+transform:scale(0.9);
+}
+
+.card:hover .status{
+transform:scale(1);
+}
+
+.open{
+background:linear-gradient(135deg, #4caf50, #45a049);
+box-shadow:0 4px 15px rgba(76,175,80,0.4);
+}
+.closed{
+background:linear-gradient(135deg, #f44336, #d32f2f);
+box-shadow:0 4px 15px rgba(244,67,54,0.4);
+}
+
+.card.closed{
+opacity:0.5;
+transform:translateY(0) scale(0.95);
+pointer-events:none;
+transition:all 0.3s ease;
+}
+
+.card.closed:hover{
+transform:translateY(0) scale(0.95);
+box-shadow:0 10px 30px rgba(0,0,0,.15);
+}
+</style>
+</head>
+
+<body>
+
+<div class="dashboard">
+<h1>Campus Bites</h1>
+
+<div class="controls">
+<select id="collegeSelect">
+<option value="" selected>🎓 Select Your College</option>
+<option value="SRIMT">🏫 SRIMT</option>
+</select>
+</div>
+
+<!-- EMPTY STATE - Shows when no college selected -->
+<div class="empty-state" id="emptyState">
+<div class="empty-icon">🍽️</div>
+<h3>Choose Your College</h3>
+<p>Select your college from the dropdown above to view available canteens</p>
+</div>
+
+<div class="grid" id="grid" style="display:none;">
+
+<!-- NESCAFE -->
+<div class="card" data-colleges="SRIMT" data-id="nescafe"
+data-link="https://campusbitesnescafe.vercel.app">
+<img src="https://images.unsplash.com/photo-1511920170033-f8396924c348">
+<div class="overlay"><span>☕ Nescafe</span></div>
+</div>
+
+<!-- RAHUL -->
+<div class="card" data-colleges="SRIMT" data-id="rahul"
+data-link="https://campusbitessingh-cafe.vercel.app">
+<img src="https://images.unsplash.com/photo-1550547660-d9450f859349">
+<div class="overlay"><span>🍽️ Singh Cafe</span></div>
+</div>
+
+<!-- FOOD COURT -->
+<div class="card" data-colleges="SRIMT" data-id="foodcourt"
+data-link="https://campusbitesfoodcourt.vercel.app">
+<img src="https://images.unsplash.com/photo-1600891964599-f61ba0e24092">
+<div class="overlay"><span>🍕 Food Court</span></div>
+</div>
+
+<!-- ONE POUR -->
+<div class="card" data-colleges="SRIMT" data-id="onepour"
+data-link="https://campusbitesone-pour.vercel.app">
+<img src="https://images.unsplash.com/photo-1551024709-8f23befc6f87">
+<div class="overlay"><span>🍹 One Pour</span></div>
+</div>
+
+</div>
+</div>
+
+<script>
+const cards = document.querySelectorAll(".card");
+const collegeSelect = document.getElementById("collegeSelect");
+const grid = document.getElementById("grid");
+const emptyState = document.getElementById("emptyState");
+
+// 🔥 KITCHEN STATUS
+const kitchenStatus = {
+  nescafe: true,
+  rahul: false,
+  foodcourt: true,
+  onepour: true
+};
+
+// APPLY STATUS BADGES
+function applyStatus() {
+  cards.forEach(card => {
+    const id = card.dataset.id;
+    const isOpen = kitchenStatus[id];
+
+    const existingBadge = card.querySelector('.status');
+    if (existingBadge) existingBadge.remove();
+
+    let badge = document.createElement("div");
+    badge.className = "status";
+
+    if(isOpen){
+      badge.innerText = "🟢 Open";
+      badge.classList.add("open");
+    } else {
+      badge.innerText = "🔴 Closed";
+      badge.classList.add("closed");
+      card.classList.add("closed");
+    }
+
+    card.appendChild(badge);
+  });
+}
+
+// SMOOTH COLLEGE FILTER - ONLY SHOWS WHEN COLLEGE SELECTED
+function applyCollegeFilter() {
+  const college = collegeSelect.value;
+  
+  // Hide grid and show empty state if no college selected
+  if (college === "") {
+    grid.style.display = 'none';
+    emptyState.style.display = 'block';
+    return;
+  }
+  
+  // Show grid and hide empty state
+  emptyState.style.display = 'none';
+  grid.style.display = 'grid';
+  
+  // Reset all cards
+  cards.forEach(card => {
+    card.classList.remove("show");
+  });
+  
+  // Show matching cards with staggered animation
+  const matchingCards = Array.from(cards).filter(card => 
+    card.dataset.colleges.includes(college)
+  );
+  
+  matchingCards.forEach((card, index) => {
+    setTimeout(() => {
+      card.classList.add("show");
+    }, index * 120);
+  });
+}
+
+// EVENT LISTENERS
+collegeSelect.addEventListener("change", applyCollegeFilter);
+
+// CLICK HANDLER
+cards.forEach(card => {
+  card.addEventListener("click", () => {
+    if (card.classList.contains("closed")) {
+      setTimeout(() => {
+        alert("Kitchen is closed ❌\nPlease try another option!");
+      }, 100);
+      return;
+    }
+
+    const link = card.dataset.link;
+    document.body.style.pointerEvents = 'none';
+    setTimeout(() => {
+      window.location.href = link;
+    }, 200);
+  });
+});
+
+// INITIALIZE - Cards stay hidden, show empty state
+applyStatus();
+emptyState.style.display = 'block';
+grid.style.display = 'none';
+</script>
+
+</body>
+</html>
