@@ -8,81 +8,72 @@
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet">
 
 <style>
-*{box-sizing:border-box;}
+*{box-sizing:border-box;margin:0;padding:0;}
 
 body{
-margin:0;
 font-family:Inter,sans-serif;
-background:linear-gradient(rgba(255,255,255,.9), rgba(255,255,255,.9)),
-url("https://images.unsplash.com/photo-1540189549336-e6e99c3679fe");
+background:
+linear-gradient(rgba(255,255,255,0.85), rgba(255,255,255,0.85)),
+url("https://images.unsplash.com/photo-1540189549336-e6e99c3679fe?q=60&w=1200");
 background-size:cover;
+background-position:center;
+background-attachment:scroll;
 display:flex;
 justify-content:center;
 align-items:center;
 min-height:100vh;
+padding:10px;
 }
 
 .dashboard{
-max-width:1000px;
 width:100%;
-padding:30px;
-background:#fff;
-border-radius:20px;
-box-shadow:0 20px 60px rgba(0,0,0,.15);
+max-width:900px;
+padding:20px;
+background:#ffffff;
+border-radius:12px;
+box-shadow:0 5px 20px rgba(0,0,0,.1);
 }
 
-h1{text-align:center;color:#ff5722;margin-bottom:40px;}
-
-.empty-state{
+h1{
 text-align:center;
-padding:60px 20px;
-color:#666;
-}
-
-.empty-state h3{
 color:#ff5722;
-font-size:24px;
-margin-bottom:10px;
+margin-bottom:20px;
+font-size:22px;
 }
 
 .controls{
 text-align:center;
-margin:20px 0 40px 0;
+margin-bottom:20px;
 }
 
 select{
-padding:12px 16px;
-border-radius:12px;
-border:2px solid #e0e0e0;
-font-size:16px;
-font-weight:600;
-min-width:200px;
+padding:10px;
+border-radius:10px;
+border:1px solid #ccc;
+font-size:15px;
+width:100%;
+max-width:250px;
+}
+
+.empty-state{
+text-align:center;
+padding:30px;
+color:#777;
 }
 
 .grid{
-display:grid;
-grid-template-columns:repeat(auto-fit,minmax(220px,1fr));
-gap:20px;
-min-height:300px;
+display:none;
+grid-template-columns:repeat(auto-fit,minmax(140px,1fr));
+gap:15px;
 }
 
 .card{
-opacity:0;
-transform:translateY(30px) scale(0.95);
-height:220px;
-border-radius:15px;
+height:150px;
+border-radius:12px;
 overflow:hidden;
 cursor:pointer;
 position:relative;
-box-shadow:0 10px 30px rgba(0,0,0,.15);
-transition:all 0.4s ease;
-display:none;
-}
-
-.card.show{
-opacity:1;
-transform:translateY(0) scale(1);
-display:block;
+box-shadow:0 5px 15px rgba(0,0,0,.1);
 }
 
 .card img{
@@ -95,21 +86,21 @@ object-fit:cover;
 position:absolute;
 bottom:0;
 width:100%;
-padding:16px;
-background:linear-gradient(to top, rgba(0,0,0,0.9), transparent);
+padding:8px;
+background:rgba(0,0,0,0.6);
 color:#fff;
-font-weight:700;
+font-size:14px;
+text-align:center;
 }
 
 .status{
 position:absolute;
-top:12px;
-right:12px;
-padding:6px 12px;
-border-radius:12px;
+top:8px;
+right:8px;
+padding:4px 8px;
+border-radius:8px;
+font-size:12px;
 color:#fff;
-font-size:13px;
-font-weight:600;
 }
 
 .open{background:#4caf50;}
@@ -139,25 +130,25 @@ pointer-events:none;
 <p>Select your college to view canteens</p>
 </div>
 
-<div class="grid" id="grid" style="display:none;">
+<div class="grid" id="grid">
 
 <div class="card" data-colleges="SRIMT" data-id="nescafe" data-link="https://campusbitesnescafe.vercel.app">
-<img src="https://images.unsplash.com/photo-1511920170033-f8396924c348">
+<img src="https://images.unsplash.com/photo-1511920170033-f8396924c348?q=60&w=400">
 <div class="overlay">☕ Nescafe</div>
 </div>
 
 <div class="card" data-colleges="SRIMT" data-id="rahul" data-link="https://campusbitessingh-cafe.vercel.app">
-<img src="https://images.unsplash.com/photo-1550547660-d9450f859349">
+<img src="https://images.unsplash.com/photo-1550547660-d9450f859349?q=60&w=400">
 <div class="overlay">🍽️ Singh Cafe</div>
 </div>
 
 <div class="card" data-colleges="SRIMT" data-id="foodcourt" data-link="https://campusbitesfoodcourt.vercel.app">
-<img src="https://images.unsplash.com/photo-1600891964599-f61ba0e24092">
+<img src="https://images.unsplash.com/photo-1600891964599-f61ba0e24092?q=60&w=400">
 <div class="overlay">🍕 Food Court</div>
 </div>
 
 <div class="card" data-colleges="SRIMT" data-id="onepour" data-link="https://campusbitesone-pour.vercel.app">
-<img src="https://images.unsplash.com/photo-1551024709-8f23befc6f87">
+<img src="https://images.unsplash.com/photo-1551024709-8f23befc6f87?q=60&w=400">
 <div class="overlay">🍹 One Pour</div>
 </div>
 
@@ -166,96 +157,71 @@ pointer-events:none;
 
 <script>
 const cards = document.querySelectorAll(".card");
-const collegeSelect = document.getElementById("collegeSelect");
+const select = document.getElementById("collegeSelect");
 const grid = document.getElementById("grid");
-const emptyState = document.getElementById("emptyState");
+const empty = document.getElementById("emptyState");
 
-// ✅ LOAD STATUS FROM ADMIN PANEL
 let kitchenStatus = JSON.parse(localStorage.getItem("kitchenStatus")) || {
-  nescafe: true,
-  rahul: true,
-  foodcourt: true,
-  onepour: true
+  nescafe:true,
+  rahul:true,
+  foodcourt:true,
+  onepour:true
 };
 
-// ✅ APPLY STATUS
-function applyStatus() {
-  cards.forEach(card => {
+function applyStatus(){
+  cards.forEach(card=>{
     const id = card.dataset.id;
-    const isOpen = kitchenStatus[id];
+    const open = kitchenStatus[id];
 
-    const old = card.querySelector(".status");
-    if (old) old.remove();
-
-    const badge = document.createElement("div");
-    badge.className = "status";
-
-    // RESET STATE
-    card.classList.remove("closed");
-
-    if (isOpen) {
-      badge.innerText = "🟢 Open";
-      badge.classList.add("open");
-    } else {
-      badge.innerText = "🔴 Closed";
-      badge.classList.add("closed");
-      card.classList.add("closed");
+    let badge = card.querySelector(".status");
+    if(!badge){
+      badge = document.createElement("div");
+      badge.className="status";
+      card.appendChild(badge);
     }
 
-    card.appendChild(badge);
+    card.classList.remove("closed");
+
+    if(open){
+      badge.textContent="🟢 Open";
+      badge.className="status open";
+    }else{
+      badge.textContent="🔴 Closed";
+      badge.className="status closed";
+      card.classList.add("closed");
+    }
   });
 }
 
-// ✅ FILTER
-function applyCollegeFilter() {
-  const college = collegeSelect.value;
-
-  if (!college) {
-    grid.style.display = "none";
-    emptyState.style.display = "block";
-    return;
+select.addEventListener("change", ()=>{
+  if(!select.value){
+    grid.style.display="none";
+    empty.style.display="block";
+  }else{
+    grid.style.display="grid";
+    empty.style.display="none";
   }
+});
 
-  emptyState.style.display = "none";
-  grid.style.display = "grid";
-
-  cards.forEach(card => card.classList.remove("show"));
-
-  const match = Array.from(cards).filter(c =>
-    c.dataset.colleges.includes(college)
-  );
-
-  match.forEach((card, i) => {
-    setTimeout(() => card.classList.add("show"), i * 120);
-  });
-}
-
-collegeSelect.addEventListener("change", applyCollegeFilter);
-
-// ✅ CLICK
-cards.forEach(card => {
-  card.addEventListener("click", () => {
-    if (card.classList.contains("closed")) {
+cards.forEach(card=>{
+  card.onclick=()=>{
+    if(card.classList.contains("closed")){
       alert("Kitchen is closed ❌");
       return;
     }
     window.location.href = card.dataset.link;
-  });
+  }
 });
 
-// ✅ AUTO SYNC WITH ADMIN PANEL
-window.addEventListener("storage", () => {
+window.addEventListener("storage", ()=>{
   const updated = JSON.parse(localStorage.getItem("kitchenStatus"));
-  if (updated) {
+  if(updated){
     kitchenStatus = updated;
     applyStatus();
   }
 });
 
-// INIT
 applyStatus();
-emptyState.style.display = "block";
-grid.style.display = "none";
 </script>
 
 </body>
