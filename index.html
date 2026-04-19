@@ -92,24 +92,6 @@ color:#fff;
 font-size:14px;
 text-align:center;
 }
-
-.status{
-position:absolute;
-top:8px;
-right:8px;
-padding:4px 8px;
-border-radius:8px;
-font-size:12px;
-color:#fff;
-}
-
-.open{background:#4caf50;}
-.closed{background:#f44336;}
-
-.card.closed{
-opacity:0.5;
-pointer-events:none;
-}
 </style>
 </head>
 
@@ -132,20 +114,21 @@ pointer-events:none;
 
 <div class="grid" id="grid">
 
-<div class="card" data-colleges="SRIMT" data-id="nescafe" data-link="https://campusbitesnescafe-ochre.vercel.app">
+<div class="card" data-colleges="SRIMT" data-link="https://campusbitesnescafe-ochre.vercel.app">
 <img src="https://images.unsplash.com/photo-1511920170033-f8396924c348?q=60&w=400">
 <div class="overlay">☕ Nescafe</div>
 </div>
 
-<div class="card" data-colleges="SRIMT" data-id="rahul" data-link="https://campusbitessinghcafe.vercel.app">
+<div class="card" data-colleges="SRIMT" data-link="https://campusbitessinghcafe.vercel.app">
 <img src="https://images.unsplash.com/photo-1550547660-d9450f859349?q=60&w=400">
 <div class="overlay">🍽️ Singh Cafe</div>
 </div>
 
-<div class="card" data-colleges="SRIMT" data-id="foodcourt" data-link="https://campusbitesfoodcourt.vercel.app">
+<div class="card" data-colleges="SRIMT" data-link="https://campusbitesfoodcourt.vercel.app">
 <img src="https://images.unsplash.com/photo-1600891964599-f61ba0e24092?q=60&w=400">
 <div class="overlay">🍕 Food Court</div>
 </div>
+
 </div>
 </div>
 
@@ -154,38 +137,6 @@ const cards = document.querySelectorAll(".card");
 const select = document.getElementById("collegeSelect");
 const grid = document.getElementById("grid");
 const empty = document.getElementById("emptyState");
-
-let kitchenStatus = JSON.parse(localStorage.getItem("kitchenStatus")) || {
-  nescafe:true,
-  rahul:true,
-  foodcourt:true,
-  onepour:true
-};
-
-function applyStatus(){
-  cards.forEach(card=>{
-    const id = card.dataset.id;
-    const open = kitchenStatus[id];
-
-    let badge = card.querySelector(".status");
-    if(!badge){
-      badge = document.createElement("div");
-      badge.className="status";
-      card.appendChild(badge);
-    }
-
-    card.classList.remove("closed");
-
-    if(open){
-      badge.textContent="🟢 Open";
-      badge.className="status open";
-    }else{
-      badge.textContent="🔴 Closed";
-      badge.className="status closed";
-      card.classList.add("closed");
-    }
-  });
-}
 
 select.addEventListener("change", ()=>{
   if(!select.value){
@@ -199,23 +150,9 @@ select.addEventListener("change", ()=>{
 
 cards.forEach(card=>{
   card.onclick=()=>{
-    if(card.classList.contains("closed")){
-      alert("Kitchen is closed ❌");
-      return;
-    }
     window.location.href = card.dataset.link;
   }
 });
-
-window.addEventListener("storage", ()=>{
-  const updated = JSON.parse(localStorage.getItem("kitchenStatus"));
-  if(updated){
-    kitchenStatus = updated;
-    applyStatus();
-  }
-});
-
-applyStatus();
 </script>
 
 </body>
