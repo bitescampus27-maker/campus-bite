@@ -5,527 +5,82 @@
 <title>Campus Bites</title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;1,400&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
-
 <style>
 *{box-sizing:border-box;margin:0;padding:0;}
-
-:root{
-  --gold:#c9a84c;
-  --gold-light:#e8c96a;
-  --gold-dark:#a07830;
-  --navy:#0a0f2e;
-  --navy-mid:#111845;
-  --navy-light:#1a2460;
-  --cream:#f5f0e8;
-  --cream-dark:#ede5d4;
-  --text:#0d1235;
-  --text-muted:#5a6490;
-  --white:#ffffff;
-  --card-border:rgba(201,168,76,0.18);
-  --shadow-sm:0 2px 12px rgba(10,15,46,0.1);
-  --shadow-md:0 8px 32px rgba(10,15,46,0.18);
-  --shadow-lg:0 20px 60px rgba(10,15,46,0.28);
-}
-
+:root{--gold:#c9a84c;--gold-light:#e8c96a;--gold-dark:#a07830;--navy:#0a0f2e;--navy-mid:#111845;--navy-light:#1a2460;--cream:#f5f0e8;--cream-dark:#ede5d4;--text:#0d1235;--text-muted:#5a6490;--white:#ffffff;--card-border:rgba(201,168,76,0.18);--shadow-sm:0 2px 12px rgba(10,15,46,0.1);--shadow-md:0 8px 32px rgba(10,15,46,0.18);--shadow-lg:0 20px 60px rgba(10,15,46,0.28);}
 html{scroll-behavior:smooth;}
-
-body{
-  font-family:'DM Sans',sans-serif;
-  background:var(--cream);
-  color:var(--text);
-  min-height:100vh;
-  overflow-x:hidden;
-}
-
-/* ─── NOISE TEXTURE OVERLAY ─── */
-body::before{
-  content:'';
-  position:fixed;
-  inset:0;
-  background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.035'/%3E%3C/svg%3E");
-  pointer-events:none;
-  z-index:0;
-  opacity:0.6;
-}
-
-.hero::after{
-  content:'';
-  position:absolute;
-  top:0;left:0;right:0;
-  height:3px;
-  background:linear-gradient(90deg, transparent 0%, var(--gold) 30%, var(--gold-light) 50%, var(--gold) 70%, transparent 100%);
-  z-index:3;
-}
-
-/* ─── HERO ─── */
-.hero{
-  position:relative;
-  min-height:100vh;
-  display:flex;
-  flex-direction:column;
-  justify-content:center;
-  align-items:center;
-  padding:60px 24px 40px;
-  overflow:hidden;
-  z-index:1;
-}
-
-.hero-bg{
-  position:absolute;
-  inset:0;
-  background-image:url('https://images.unsplash.com/photo-1540189549336-e6e99c3679fe?q=80&w=1600');
-  background-size:cover;
-  background-position:center;
-  filter:brightness(0.14) saturate(0.4);
-  z-index:0;
-  transform:scale(1.05);
-  animation:slowzoom 20s ease-in-out infinite alternate;
-}
-
+body{font-family:'DM Sans',sans-serif;background:var(--cream);color:var(--text);min-height:100vh;overflow-x:hidden;}
+body::before{content:'';position:fixed;inset:0;background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.035'/%3E%3C/svg%3E");pointer-events:none;z-index:0;opacity:0.6;}
+.hero::after{content:'';position:absolute;top:0;left:0;right:0;height:3px;background:linear-gradient(90deg,transparent 0%,var(--gold) 30%,var(--gold-light) 50%,var(--gold) 70%,transparent 100%);z-index:3;}
+.hero{position:relative;min-height:100vh;display:flex;flex-direction:column;justify-content:center;align-items:center;padding:60px 24px 40px;overflow:hidden;z-index:1;}
+.hero-bg{position:absolute;inset:0;background-image:url('https://images.unsplash.com/photo-1540189549336-e6e99c3679fe?q=80&w=1600');background-size:cover;background-position:center;filter:brightness(0.14) saturate(0.4);z-index:0;transform:scale(1.05);animation:slowzoom 20s ease-in-out infinite alternate;}
 @keyframes slowzoom{from{transform:scale(1.05);}to{transform:scale(1.12);}}
-
-.hero-gradient{
-  position:absolute;
-  inset:0;
-  background:
-    radial-gradient(ellipse 70% 50% at 50% 0%, rgba(201,168,76,0.18) 0%, transparent 65%),
-    radial-gradient(ellipse 80% 70% at 0% 100%, rgba(10,15,46,0.85) 0%, transparent 60%),
-    linear-gradient(180deg, rgba(10,15,46,0.5) 0%, rgba(10,15,46,0.82) 55%, rgba(6,9,28,0.96) 100%);
-  z-index:1;
-}
-
-.hero-content{
-  position:relative;
-  z-index:2;
-  text-align:center;
-  max-width:700px;
-  animation:fadeup 0.9s cubic-bezier(.22,1,.36,1) both;
-}
-
-@keyframes fadeup{
-  from{opacity:0;transform:translateY(36px);}
-  to{opacity:1;transform:translateY(0);}
-}
-
-.badge{
-  display:inline-flex;
-  align-items:center;
-  gap:6px;
-  background:rgba(201,168,76,0.12);
-  border:1px solid rgba(201,168,76,0.45);
-  color:#e8c96a;
-  font-size:12px;
-  font-weight:500;
-  letter-spacing:0.12em;
-  text-transform:uppercase;
-  padding:6px 16px;
-  border-radius:100px;
-  margin-bottom:28px;
-}
-
-.badge-dot{
-  width:6px;height:6px;
-  border-radius:50%;
-  background:#c9a84c;
-  animation:pulse 2s ease-in-out infinite;
-}
-
+.hero-gradient{position:absolute;inset:0;background:radial-gradient(ellipse 70% 50% at 50% 0%,rgba(201,168,76,0.18) 0%,transparent 65%),radial-gradient(ellipse 80% 70% at 0% 100%,rgba(10,15,46,0.85) 0%,transparent 60%),linear-gradient(180deg,rgba(10,15,46,0.5) 0%,rgba(10,15,46,0.82) 55%,rgba(6,9,28,0.96) 100%);z-index:1;}
+.hero-content{position:relative;z-index:2;text-align:center;max-width:700px;animation:fadeup 0.9s cubic-bezier(.22,1,.36,1) both;}
+@keyframes fadeup{from{opacity:0;transform:translateY(36px);}to{opacity:1;transform:translateY(0);}}
+.badge{display:inline-flex;align-items:center;gap:6px;background:rgba(201,168,76,0.12);border:1px solid rgba(201,168,76,0.45);color:#e8c96a;font-size:12px;font-weight:500;letter-spacing:0.12em;text-transform:uppercase;padding:6px 16px;border-radius:100px;margin-bottom:28px;}
+.badge-dot{width:6px;height:6px;border-radius:50%;background:#c9a84c;animation:pulse 2s ease-in-out infinite;}
 @keyframes pulse{0%,100%{opacity:1;transform:scale(1);}50%{opacity:0.5;transform:scale(0.8);}}
-
-h1{
-  font-family:'Playfair Display',serif;
-  font-size:clamp(48px, 8vw, 86px);
-  font-weight:700;
-  color:#ffffff;
-  line-height:1.05;
-  letter-spacing:-0.02em;
-  margin-bottom:8px;
-}
-
-h1 em{
-  font-style:italic;
-  color:var(--gold-light);
-}
-
-.tagline{
-  font-size:17px;
-  color:rgba(255,255,255,0.6);
-  font-weight:300;
-  margin-bottom:48px;
-  line-height:1.6;
-  letter-spacing:0.01em;
-}
-
-/* ─── COLLEGE SELECTOR ─── */
-.selector-wrap{
-  position:relative;
-  display:inline-block;
-  width:100%;
-  max-width:360px;
-  margin-bottom:16px;
-}
-
-.selector-label{
-  display:block;
-  font-size:11px;
-  font-weight:500;
-  letter-spacing:0.12em;
-  text-transform:uppercase;
-  color:rgba(255,255,255,0.45);
-  margin-bottom:10px;
-  text-align:left;
-}
-
-.college-select{
-  width:100%;
-  padding:16px 52px 16px 20px;
-  border-radius:14px;
-  border:1.5px solid rgba(255,255,255,0.18);
-  background:rgba(255,255,255,0.08);
-  backdrop-filter:blur(16px);
-  color:#ffffff;
-  font-family:'DM Sans',sans-serif;
-  font-size:16px;
-  font-weight:400;
-  appearance:none;
-  cursor:pointer;
-  transition:border-color 0.2s, background 0.2s, box-shadow 0.2s;
-  outline:none;
-}
-
-.college-select:hover{
-  border-color:rgba(201,168,76,0.6);
-  background:rgba(201,168,76,0.08);
-}
-
-.college-select:focus{
-  border-color:var(--gold-light);
-  box-shadow:0 0 0 4px rgba(201,168,76,0.15);
-}
-
+h1{font-family:'Playfair Display',serif;font-size:clamp(48px,8vw,86px);font-weight:700;color:#ffffff;line-height:1.05;letter-spacing:-0.02em;margin-bottom:8px;}
+h1 em{font-style:italic;color:var(--gold-light);}
+.tagline{font-size:17px;color:rgba(255,255,255,0.6);font-weight:300;margin-bottom:48px;line-height:1.6;letter-spacing:0.01em;}
+.selector-wrap{position:relative;display:inline-block;width:100%;max-width:360px;margin-bottom:16px;}
+.selector-label{display:block;font-size:11px;font-weight:500;letter-spacing:0.12em;text-transform:uppercase;color:rgba(255,255,255,0.45);margin-bottom:10px;text-align:left;}
+.college-select{width:100%;padding:16px 52px 16px 20px;border-radius:14px;border:1.5px solid rgba(255,255,255,0.18);background:rgba(255,255,255,0.08);backdrop-filter:blur(16px);color:#ffffff;font-family:'DM Sans',sans-serif;font-size:16px;font-weight:400;appearance:none;cursor:pointer;transition:border-color 0.2s,background 0.2s,box-shadow 0.2s;outline:none;}
+.college-select:hover{border-color:rgba(201,168,76,0.6);background:rgba(201,168,76,0.08);}
+.college-select:focus{border-color:var(--gold-light);box-shadow:0 0 0 4px rgba(201,168,76,0.15);}
 .college-select option{background:#0a0f2e;color:#fff;}
-
-.select-arrow{
-  position:absolute;
-  right:18px;
-  bottom:18px;
-  pointer-events:none;
-  color:rgba(255,255,255,0.5);
-}
-
-.cta-hint{
-  font-size:13px;
-  color:rgba(255,255,255,0.35);
-}
-
-/* ─── SCROLL INDICATOR ─── */
-.scroll-hint{
-  position:absolute;
-  bottom:32px;
-  left:50%;
-  transform:translateX(-50%);
-  z-index:2;
-  display:flex;
-  flex-direction:column;
-  align-items:center;
-  gap:8px;
-  opacity:0;
-  animation:fadein 1s 1.5s forwards;
-}
-
+.select-arrow{position:absolute;right:18px;bottom:18px;pointer-events:none;color:rgba(255,255,255,0.5);}
+.cta-hint{font-size:13px;color:rgba(255,255,255,0.35);}
+.scroll-hint{position:absolute;bottom:32px;left:50%;transform:translateX(-50%);z-index:2;display:flex;flex-direction:column;align-items:center;gap:8px;opacity:0;animation:fadein 1s 1.5s forwards;}
 @keyframes fadein{to{opacity:1;}}
-
 .scroll-hint span{font-size:11px;color:rgba(255,255,255,0.3);letter-spacing:0.1em;text-transform:uppercase;}
-
-.scroll-mouse{
-  width:22px;height:34px;
-  border:1.5px solid rgba(255,255,255,0.25);
-  border-radius:11px;
-  display:flex;
-  justify-content:center;
-  padding-top:6px;
-}
-
-.scroll-mouse::after{
-  content:'';
-  width:3px;height:6px;
-  background:rgba(255,255,255,0.5);
-  border-radius:2px;
-  animation:scrolldot 2s ease-in-out infinite;
-}
-
+.scroll-mouse{width:22px;height:34px;border:1.5px solid rgba(255,255,255,0.25);border-radius:11px;display:flex;justify-content:center;padding-top:6px;}
+.scroll-mouse::after{content:'';width:3px;height:6px;background:rgba(255,255,255,0.5);border-radius:2px;animation:scrolldot 2s ease-in-out infinite;}
 @keyframes scrolldot{0%,100%{transform:translateY(0);opacity:1;}80%{transform:translateY(8px);opacity:0;}}
-
-/* ─── CANTEEN SECTION ─── */
-.section{
-  position:relative;
-  z-index:1;
-  padding:80px 24px 100px;
-  max-width:1000px;
-  margin:0 auto;
-  display:none;
-  animation:fadeup 0.6s cubic-bezier(.22,1,.36,1) both;
-}
-
+.section{position:relative;z-index:1;padding:80px 24px 100px;max-width:1000px;margin:0 auto;display:none;animation:fadeup 0.6s cubic-bezier(.22,1,.36,1) both;}
 .section.visible{display:block;}
-
-.section-header{
-  display:flex;
-  align-items:flex-end;
-  justify-content:space-between;
-  margin-bottom:40px;
-  gap:16px;
-  flex-wrap:wrap;
-}
-
-.section-title{
-  font-family:'Playfair Display',serif;
-  font-size:clamp(28px,4vw,42px);
-  font-weight:700;
-  color:var(--navy);
-  line-height:1.1;
-}
-
+.section-header{display:flex;align-items:flex-end;justify-content:space-between;margin-bottom:40px;gap:16px;flex-wrap:wrap;}
+.section-title{font-family:'Playfair Display',serif;font-size:clamp(28px,4vw,42px);font-weight:700;color:var(--navy);line-height:1.1;}
 .section-title span{color:var(--gold-dark);}
-
-.canteen-count{
-  font-size:13px;
-  color:var(--text-muted);
-  font-weight:400;
-  padding-bottom:4px;
-}
-
-/* ─── GRID ─── */
-.grid{
-  display:grid;
-  grid-template-columns:repeat(auto-fit, minmax(210px, 1fr));
-  gap:20px;
-}
-
-/* ─── CARDS ─── */
-.card{
-  border-radius:20px;
-  overflow:hidden;
-  cursor:pointer;
-  position:relative;
-  background:var(--white);
-  box-shadow:var(--shadow-sm);
-  border:1px solid var(--card-border);
-  transition:transform 0.3s cubic-bezier(.34,1.56,.64,1), box-shadow 0.3s ease;
-  animation:cardrise 0.5s cubic-bezier(.22,1,.36,1) both;
-}
-
+.canteen-count{font-size:13px;color:var(--text-muted);font-weight:400;padding-bottom:4px;}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));gap:20px;}
+.card{border-radius:20px;overflow:hidden;cursor:pointer;position:relative;background:var(--white);box-shadow:var(--shadow-sm);border:1px solid var(--card-border);transition:transform 0.3s cubic-bezier(.34,1.56,.64,1),box-shadow 0.3s ease;animation:cardrise 0.5s cubic-bezier(.22,1,.36,1) both;}
 @keyframes cardrise{from{opacity:0;transform:translateY(24px);}to{opacity:1;transform:translateY(0);}}
-
 .card:nth-child(1){animation-delay:0.05s;}
 .card:nth-child(2){animation-delay:0.12s;}
 .card:nth-child(3){animation-delay:0.19s;}
 .card:nth-child(4){animation-delay:0.26s;}
-
-.card:hover:not(.closed){
-  transform:translateY(-6px) scale(1.01);
-  box-shadow:var(--shadow-lg);
-}
-
-.card::before{
-  content:'';
-  position:absolute;
-  top:0;left:0;right:0;
-  height:3px;
-  background:linear-gradient(90deg, var(--gold-dark), var(--gold-light), var(--gold-dark));
-  opacity:0;
-  transition:opacity 0.3s ease;
-  z-index:2;
-}
-
+.card:hover:not(.closed){transform:translateY(-6px) scale(1.01);box-shadow:var(--shadow-lg);}
+.card::before{content:'';position:absolute;top:0;left:0;right:0;height:3px;background:linear-gradient(90deg,var(--gold-dark),var(--gold-light),var(--gold-dark));opacity:0;transition:opacity 0.3s ease;z-index:2;}
 .card:hover:not(.closed)::before{opacity:1;}
-
-.card.closed{
-  opacity:0.55;
-  cursor:not-allowed;
-  filter:grayscale(0.5);
-}
-
-.card-img-wrap{
-  height:180px;
-  overflow:hidden;
-  position:relative;
-}
-
-.card img{
-  width:100%;height:100%;
-  object-fit:cover;
-  transition:transform 0.5s ease;
-}
-
+.card.closed{opacity:0.55;cursor:not-allowed;filter:grayscale(0.5);}
+.card-img-wrap{height:180px;overflow:hidden;position:relative;}
+.card img{width:100%;height:100%;object-fit:cover;transition:transform 0.5s ease;}
 .card:hover:not(.closed) img{transform:scale(1.06);}
-
-/* Status pill */
-.status{
-  position:absolute;
-  top:12px;
-  right:12px;
-  padding:5px 12px;
-  border-radius:100px;
-  font-size:11px;
-  font-weight:500;
-  letter-spacing:0.04em;
-  backdrop-filter:blur(8px);
-  display:flex;
-  align-items:center;
-  gap:5px;
-}
-
-.status.open{
-  background:rgba(22,163,74,0.85);
-  color:#fff;
-  border:1px solid rgba(255,255,255,0.25);
-}
-
-.status.closed-badge{
-  background:rgba(185,28,28,0.8);
-  color:#fff;
-  border:1px solid rgba(255,255,255,0.2);
-}
-
-.status-dot{
-  width:6px;height:6px;
-  border-radius:50%;
-  background:currentColor;
-  opacity:0.9;
-}
-
-/* Card body */
-.card-body{
-  padding:18px 18px 20px;
-}
-
-.card-name{
-  font-family:'Playfair Display',serif;
-  font-size:19px;
-  font-weight:700;
-  color:var(--navy);
-  margin-bottom:4px;
-}
-
-.card-desc{
-  font-size:13px;
-  color:var(--text-muted);
-  font-weight:300;
-  line-height:1.5;
-  margin-bottom:16px;
-}
-
-.card-cta{
-  display:flex;
-  align-items:center;
-  gap:6px;
-  font-size:13px;
-  font-weight:500;
-  color:var(--gold-dark);
-  transition:gap 0.2s;
-}
-
+.card-body{padding:18px 18px 20px;}
+.card-name{font-family:'Playfair Display',serif;font-size:19px;font-weight:700;color:var(--navy);margin-bottom:4px;}
+.card-desc{font-size:13px;color:var(--text-muted);font-weight:300;line-height:1.5;margin-bottom:16px;}
+.card-cta{display:flex;align-items:center;gap:6px;font-size:13px;font-weight:500;color:var(--gold-dark);transition:gap 0.2s;}
 .card:hover:not(.closed) .card-cta{gap:10px;}
-
 .card-cta svg{transition:transform 0.2s;}
 .card:hover:not(.closed) .card-cta svg{transform:translateX(3px);}
-
-.closed-msg{
-  font-size:13px;
-  color:#b91c1c;
-  font-weight:400;
-}
-
-/* ─── STATS BAR ─── */
-.stats{
-  display:flex;
-  gap:0;
-  background:var(--white);
-  border:1px solid var(--card-border);
-  border-radius:16px;
-  overflow:hidden;
-  margin-bottom:40px;
-  box-shadow:var(--shadow-sm);
-}
-
-.stat{
-  flex:1;
-  padding:20px 24px;
-  text-align:center;
-  border-right:1px solid var(--card-border);
-}
-
-.stat:last-child{border-right:none;}
-
-.stat-num{
-  font-family:'Playfair Display',serif;
-  font-size:26px;
-  font-weight:700;
-  color:var(--gold-dark);
-  display:block;
-}
-
-.stat-label{
-  font-size:12px;
-  color:var(--text-muted);
-  margin-top:2px;
-}
-
-/* ─── FOOTER ─── */
-footer{
-  position:relative;
-  z-index:1;
-  text-align:center;
-  padding:32px 24px;
-  font-size:13px;
-  color:var(--text-muted);
-  border-top:1px solid rgba(10,15,46,0.1);
-}
-
+.closed-msg{font-size:13px;color:#b91c1c;font-weight:400;}
+footer{position:relative;z-index:1;text-align:center;padding:32px 24px;font-size:13px;color:var(--text-muted);border-top:1px solid rgba(10,15,46,0.1);}
 footer strong{color:var(--gold-dark);font-weight:500;}
-
-/* ─── EMPTY ─── */
-.empty{
-  text-align:center;
-  padding:60px 24px;
-  background:var(--white);
-  border-radius:20px;
-  border:1px dashed rgba(201,168,76,0.3);
-}
-
-.empty-icon{font-size:48px;margin-bottom:16px;}
-.empty h3{font-family:'Playfair Display',serif;font-size:22px;color:var(--navy);margin-bottom:8px;}
-.empty p{font-size:14px;color:var(--text-muted);}
-
-/* ─── RESPONSIVE ─── */
-@media(max-width:480px){
-  .stats{flex-direction:column;}
-  .stat{border-right:none;border-bottom:1px solid var(--card-border);}
-  .stat:last-child{border-bottom:none;}
-  .grid{grid-template-columns:1fr 1fr;}
-}
-
+@media(max-width:480px){.grid{grid-template-columns:1fr 1fr;}}
 @media(max-width:360px){.grid{grid-template-columns:1fr;}}
 </style>
 </head>
 <body>
 
-<!-- ─── HERO ─── -->
 <section class="hero">
   <div class="hero-bg"></div>
   <div class="hero-gradient"></div>
-
   <div class="hero-content">
-    <div class="badge">
-      <span class="badge-dot"></span>
-      Campus Dining — SRIMT
-    </div>
-
+    <div class="badge"><span class="badge-dot"></span>Campus Bites — SRIMT</div>
     <h1>Eat <em>well,</em><br>study harder.</h1>
-
     <p class="tagline">Hot meals, cold brews, and everything in between —<br>all your campus canteens, one tap away.</p>
-
     <div class="selector-wrap">
       <label class="selector-label" for="collegeSelect">Your college</label>
       <select class="college-select" id="collegeSelect">
@@ -534,41 +89,20 @@ footer strong{color:var(--gold-dark);font-weight:500;}
       </select>
       <svg class="select-arrow" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="m6 9 6 6 6-6"/></svg>
     </div>
-
-    <p class="cta-hint">↓ View open canteens near you</p>
+    <p class="cta-hint">↓ View canteens near you</p>
   </div>
-
   <div class="scroll-hint">
     <div class="scroll-mouse"></div>
     <span>Scroll</span>
   </div>
 </section>
 
-<!-- ─── CANTEEN GRID ─── -->
 <section class="section" id="canteenSection">
-
-  <div class="stats" id="statsBar">
-    <div class="stat">
-      <span class="stat-num" id="openCount">—</span>
-      <span class="stat-label">Open now</span>
-    </div>
-    <div class="stat">
-      <span class="stat-num">4</span>
-      <span class="stat-label">Canteens</span>
-    </div>
-    <div class="stat">
-      <span class="stat-num">⚡ Fast</span>
-      <span class="stat-label">Live status</span>
-    </div>
-  </div>
-
   <div class="section-header">
     <h2 class="section-title">What's <span>open</span> today?</h2>
     <span class="canteen-count" id="collegeLabel"></span>
   </div>
-
   <div class="grid" id="grid">
-
     <div class="card" data-id="nescafe" data-link="https://campusbitesnescafe.vercel.app">
       <div class="card-img-wrap">
         <img src="https://images.unsplash.com/photo-1511920170033-f8396924c348?q=70&w=600" alt="Nescafe">
@@ -576,27 +110,19 @@ footer strong{color:var(--gold-dark);font-weight:500;}
       <div class="card-body">
         <p class="card-name">☕ Nescafe</p>
         <p class="card-desc">Coffee, snacks &amp; quick bites to fuel your study sessions.</p>
-        <div class="card-cta open-cta">
-          Order now
-          <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
-        </div>
+        <div class="card-cta">Order now <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7"/></svg></div>
       </div>
     </div>
-
-    <div class="card" data-id="rahul" data-link="https://campusbitessingh-cafe.vercel.app">
+    <div class="card" data-id="rahul" data-link="https://campusbitessinghcafe.vercel.app">
       <div class="card-img-wrap">
         <img src="https://images.unsplash.com/photo-1550547660-d9450f859349?q=70&w=600" alt="Singh Cafe">
       </div>
       <div class="card-body">
         <p class="card-name">🍽️ Singh Cafe</p>
         <p class="card-desc">Hearty meals, fresh rotis, and the best dal on campus.</p>
-        <div class="card-cta open-cta">
-          Order now
-          <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
-        </div>
+        <div class="card-cta">Order now <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7"/></svg></div>
       </div>
     </div>
-
     <div class="card" data-id="foodcourt" data-link="https://campusbitesfoodcourt.vercel.app">
       <div class="card-img-wrap">
         <img src="https://images.unsplash.com/photo-1600891964599-f61ba0e24092?q=70&w=600" alt="Food Court">
@@ -604,13 +130,9 @@ footer strong{color:var(--gold-dark);font-weight:500;}
       <div class="card-body">
         <p class="card-name">🍕 Food Court</p>
         <p class="card-desc">Pizza, burgers, wraps — your go-to for variety and speed.</p>
-        <div class="card-cta open-cta">
-          Order now
-          <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
-        </div>
+        <div class="card-cta">Order now <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7"/></svg></div>
       </div>
     </div>
-
     <div class="card" data-id="onepour" data-link="https://campusbitesone-pour.vercel.app">
       <div class="card-img-wrap">
         <img src="https://images.unsplash.com/photo-1551024709-8f23befc6f87?q=70&w=600" alt="One Pour">
@@ -618,94 +140,57 @@ footer strong{color:var(--gold-dark);font-weight:500;}
       <div class="card-body">
         <p class="card-name">🍹 One Pour</p>
         <p class="card-desc">Fresh juices, smoothies &amp; mocktails. Sip something good.</p>
-        <div class="card-cta open-cta">
-          Order now
-          <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
-        </div>
+        <div class="card-cta">Order now <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7"/></svg></div>
       </div>
     </div>
-
   </div>
 </section>
 
-<footer>
-  Made with ❤️ for <strong>SRIMT</strong> &nbsp;·&nbsp; Campus Bites &nbsp;·&nbsp; <span id="year"></span>
-</footer>
+<footer>Made with ❤️ for <strong>SRIMT</strong> &nbsp;·&nbsp; Campus Bites &nbsp;·&nbsp; <span id="year"></span></footer>
 
 <script>
 document.getElementById('year').textContent = new Date().getFullYear();
-
 const cards = document.querySelectorAll('.card');
 const select = document.getElementById('collegeSelect');
 const section = document.getElementById('canteenSection');
-const openCount = document.getElementById('openCount');
 const collegeLabel = document.getElementById('collegeLabel');
 
-let kitchenStatus = JSON.parse(localStorage.getItem('kitchenStatus')) || {
-  nescafe: true, rahul: true, foodcourt: true, onepour: true
-};
+let kitchenStatus = {nescafe:true,rahul:true,foodcourt:true,onepour:true};
 
 function applyStatus(){
-  let open = 0;
-  cards.forEach(card => {
+  cards.forEach(card=>{
     const id = card.dataset.id;
     const isOpen = kitchenStatus[id];
-    if(isOpen) open++;
-
-    let badge = card.querySelector('.status');
-    if(!badge){
-      badge = document.createElement('div');
-      badge.className = 'status';
-      card.querySelector('.card-img-wrap').appendChild(badge);
-    }
-
     const cta = card.querySelector('.card-cta');
     card.classList.remove('closed');
-
     if(isOpen){
-      badge.className = 'status open';
-      badge.innerHTML = '<span class="status-dot"></span> Open';
-      if(cta){cta.innerHTML = 'Order now <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7"/></svg>'; cta.className='card-cta open-cta'; cta.style.color='var(--gold-dark)';}
+      if(cta){cta.innerHTML='Order now <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7"/></svg>';cta.className='card-cta';cta.style.color='var(--gold-dark)';}
     } else {
-      badge.className = 'status closed-badge';
-      badge.innerHTML = '<span class="status-dot"></span> Closed';
       card.classList.add('closed');
-      if(cta){cta.textContent='Currently closed'; cta.className='closed-msg';}
+      if(cta){cta.textContent='Currently closed';cta.className='closed-msg';}
     }
   });
-  openCount.textContent = open;
 }
 
-select.addEventListener('change', () => {
-  if(!select.value){
-    section.classList.remove('visible');
-  } else {
+select.addEventListener('change',()=>{
+  if(!select.value){section.classList.remove('visible');}
+  else{
     section.classList.add('visible');
-    collegeLabel.textContent = select.options[select.selectedIndex].text.replace(/[🏫\s]+/,'').trim();
-    section.scrollIntoView({behavior:'smooth', block:'start'});
+    collegeLabel.textContent=select.options[select.selectedIndex].text.replace(/[🏫\s]+/,'').trim();
+    section.scrollIntoView({behavior:'smooth',block:'start'});
     applyStatus();
   }
 });
 
-cards.forEach(card => {
-  card.addEventListener('click', () => {
-    if(card.classList.contains('closed')){
-      card.style.animation = 'shake 0.4s ease';
-      setTimeout(()=>card.style.animation='',400);
-      return;
-    }
-    window.location.href = card.dataset.link;
+cards.forEach(card=>{
+  card.addEventListener('click',()=>{
+    if(card.classList.contains('closed')){card.style.animation='shake 0.4s ease';setTimeout(()=>card.style.animation='',400);return;}
+    window.location.href=card.dataset.link;
   });
 });
 
-window.addEventListener('storage', () => {
-  const updated = JSON.parse(localStorage.getItem('kitchenStatus'));
-  if(updated){ kitchenStatus = updated; applyStatus(); }
-});
-
-// Shake animation for closed
-const style = document.createElement('style');
-style.textContent = '@keyframes shake{0%,100%{transform:translateX(0);}20%{transform:translateX(-6px);}40%{transform:translateX(6px);}60%{transform:translateX(-4px);}80%{transform:translateX(4px);}}';
+const style=document.createElement('style');
+style.textContent='@keyframes shake{0%,100%{transform:translateX(0);}20%{transform:translateX(-6px);}40%{transform:translateX(6px);}60%{transform:translateX(-4px);}80%{transform:translateX(4px);}}';
 document.head.appendChild(style);
 
 applyStatus();
